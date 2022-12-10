@@ -1,0 +1,694 @@
+﻿def SinglePlayerCampaignVars
+{
+	
+	string name
+	{
+		text name = "Campaign name"
+	}
+	
+	string goal_prestige_victory
+	{
+		text name = "Emperor of the World"
+		text description = "Claim the 'Emperor of the World' title by becoming a great power and gaining the favor of the rest of the world."
+		sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_Emperor.psd:Element_Objective_Emperor#2" //GUID:b28f2f870f1234b4db11d22388c920a4
+		scoring
+		{
+			fame : ObjectiveScoreTypes.fame
+		}
+	}
+	
+	string goal_kingdom_advantages
+	{
+		text name = "Kingdom Advantages"
+		text description = "Unlock each kingdom advantage by producing or importing all goods."
+		sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_Advantages.psd:Element_Objective_Advantages#2" //GUID:7d8ffa8d3b731ca4b875e3757250b2ba
+		scoring
+		{
+			unique_resources: ObjectiveScoreTypes.unique_resources
+		}
+	}
+	
+	string main_goal
+	{
+		text name = "Main Goal"
+		text description = "Select the main goal of the campaign - you must achieve it to win."
+		//sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_GrandCampaign.png:Icon_MultiplayerCampaign_GrandCampaign#2"
+		on_change_reset
+		{
+			gold_goal
+			realms_goal
+			goods_goal
+			target_kingdom_size
+		}
+		options
+		{
+			
+			default None
+			{
+				text name = "None"
+				text secondary_name = "Grand Campaign"
+				text victory_condition = "Only grand campaign victory conditions apply"
+				text description = "No minor victory condition applies. You may win by following the regular grand campaign rules."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_GrandCampaign.psd:Element_Objective_GrandCampaign#2" //GUID:e63b8aa606c190442aafd165bbd17457
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_GrandCampaign.psd:Element_GameMode_GrandCampaign#2" //GUID:aff01d201a1157443a67ecdf3fa8c3aa
+				scoring
+				{
+					fame : ObjectiveScoreTypes.fame
+				}
+			}
+			// default GrandCampaign
+			// {
+			// 	text name = "Grand Campaign"
+			// 	text victory_condition = "Become Emperor of the World"
+			// 	text description = "Win the campaign by becoming the emperor of the world or developing all advantages."
+			// 	sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_GrandCampaign.psd:Element_Objective_GrandCampaign#2" //GUID:e63b8aa606c190442aafd165bbd17457
+			// 	scoring
+			// 	{
+			// 		fame : ObjectiveScoreTypes.fame
+			// 	}
+			// }
+			HaveXGold
+			{
+				text name = "Greedy Kings"
+				text victory_condition = "{b}Victory condition:{/b} Have [{clr:red}{gold_goal}{/clr}|target] gold in your treasury"
+				text description = "Become a wealthy ruler and fill your kingdom's treasury by collecting [{b}{gold_goal} gold{/b}|the selected amount of target gold] in your treasury."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_GreedyKings.psd:Element_Objective_GreedyKings#2" //GUID:cfdb237c6181d3549bd0c1e5d7a923f1
+				scoring
+				{
+					gold : ObjectiveScoreTypes.gold
+				}
+			}
+			HaveXRealms
+			{
+				text name = "Peasants Rush"
+				text victory_condition = "{b}Victory condition:{/b} Expand and control [{clr:red}{realms_goal}{/clr}|selected number of] provinces"
+				text description = "Defend your territories and conquer new ones to ensure the glory of your kingdom - you win when you reach [{b}{realms_goal} provinces{/b}|the selected number of provinces] and establish control over them."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_PeasantRush.psd:Element_Objective_PeasantRush#2" //GUID:fa5266ccd240e384daa9ff165436a1fc
+				scoring
+				{
+					realms : ObjectiveScoreTypes.realms
+				}
+			}
+			WarForGoods
+			{
+				text name = "War for Goods"
+				text victory_condition = "{b}Victory condition:{/b} Own {clr:red}{goods_goal}{/clr} goods"
+				text description = "Develop your kingdom's economy and ensure production of [{b}{goods_goal} goods{/b}|the selected number of goods{/b}] in your lands."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_WarForGoods.psd:Element_Objective_WarForGoods#2" //GUID:3d16cd5c936518a4c89f772e146c1c7f
+				scoring
+				{
+					unique_resources : ObjectiveScoreTypes.unique_resources
+				}
+			}
+			DestroyKingdom
+			{
+				text name = "Destroy Kingdom"
+				text victory_condition = "{b}Victory condition:{/b} Defeat a kingdom"
+				text description = "[{destroy_goal:if}{b}{destroy_goal}{/b} is your target|A kingdom will be randomly selected to be your target] - ensure its destruction by your hands."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_DestroyKingdom.psd:Element_Objective_DestroyKingdom#2" //GUID:2f82cbf841699044f9755fbf7a3b7cb9
+				scoring
+				{
+					army_strength : ObjectiveScoreTypes.army_strength
+				}
+			}
+		}
+	}
+
+	
+	int gold_goal
+	{
+		text name = "Gold Amount"
+		text description = "Amount of gold required to win the campaign"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GoodsGoal.png:Icon_MultiplayerCampaign_GoodsGoal#2"
+		condition = (main_goal = "HaveXGold")
+		bool sub_rule = true
+		options
+		{
+			20000
+			{
+				text name = "20,000 {gold_icon}"
+				text description = "Gold amount, required for victory"
+			}
+			default 35000
+			{
+				text name = "35,000 {gold_icon}"
+				text description = "Gold amount, required for victory"
+			}
+			50000
+			{
+				text name = "50,000 {gold_icon}"
+				text description = "Gold amount, required for victory"
+			}
+			100000
+			{
+				text name = "100,000 {gold_icon}"
+				text description = "Gold amount, required for victory"
+			}
+			200000
+			{
+				text name = "200,000 {gold_icon}"
+				text description = "Gold amount, required for victory"
+			}
+		}
+	}
+	
+	int realms_goal
+	{
+		text name = "Provinces"
+		text description = "Expand your territories and reach the set province goal"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_HaveXRealms.png:Icon_MultiplayerCampaign_HaveXRealms#2"
+		condition = (main_goal = "HaveXRealms")
+		bool sub_rule = true
+		on_change_reset
+		{
+			pick_kingdom
+		}
+		options
+		{
+			5
+			{
+				text name = "5 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+			default 10
+			{
+				text name = "10 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+			15
+			{
+				text name = "15 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+			25
+			{
+				text name = "25 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+			50
+			{
+				text name = "50 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+			100
+			{
+				text name = "100 provinces"
+				text description = "Number of provinces required for victory"
+				sprite icon
+			}
+		}
+		
+	}
+	
+	int goods_goal
+	{
+		text name = "Goods produced"
+		text description = "Unique goods produced by players"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GoodsGoal.png:Icon_MultiplayerCampaign_GoodsGoal#2"
+		condition = (main_goal = "WarForGoods")
+		bool sub_rule = true
+		options
+		{
+			10
+			{
+				text name = "10 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			default 20
+			{
+				text name = "20 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			30
+			{
+				text name = "30 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			50
+			{
+				text name = "50 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			64
+			{
+				text name = "64 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+		}
+	}
+
+	int target_kingdom_size
+	{
+		bool show_in_rules = true
+		text name = "Enemy Size"
+		text description = "The relative size of the kingdom targeted for defeat"
+		sprite icon
+		condition = (main_goal = "DestroyKingdom")
+		bool sub_rule = true
+		options
+		{
+
+			1
+			{
+				text name = "Tiny"
+				text description = "The target kingdom will start with 1 or 2 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Small.png:Icon_MultiplayerCampaign_KingdomSize_Small#2"
+			}
+			2
+			{
+				text name = "Small"
+				text description = "The target kingdom will start with between 3 and 5 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Small.png:Icon_MultiplayerCampaign_KingdomSize_Small#2"
+			}
+			default 3
+			{
+				text name = "Medium"
+				text description = "The target kingdom will start with between 6 and 8 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Medium.png:Icon_MultiplayerCampaign_KingdomSize_Medium#2"
+			}
+			4
+			{
+				text name = "Large"
+				text description = "The target kingdom will start with between 9 and 12 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Large.png:Icon_MultiplayerCampaign_KingdomSize_Large#2"
+			}
+			5
+			{
+				text name = "Empire"
+				text description = "The target kingdom will start with 13 or more provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Empire.png:Icon_MultiplayerCampaign_KingdomSize_Empire#2"
+			}
+		}
+	}
+
+	// sub rules 
+
+	string ai_difficulty
+	{
+		bool show_in_rules = true
+		text name = "Difficulty"
+		text description = "Depending on this setting, some starting conditions or events can be changed/limited to ease the players, as well as the power of rebellions and AI kingdoms, their attitude towards players, and others."
+		sprite icon
+		options
+		{
+			easy
+			{
+				text name = "Easy"
+				text description = "Recommended for inexperienced or casual players.{p}Players will have less troubles in the beginning of the campaign and both AI and rebels will pose a smaller threat towards them."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_Easy.png:Icon_MultiplayerCampaign_AIDifficulty_Easy#2" //GUID:14a91993fd4ef3d4ab571a96a80623e4
+			}
+			default normal
+			{
+				text name = "Normal"
+				text description = "Standard campaign difficulty.{p}Players will have moderate challenge with no rules to increase or decrease it."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AgingSpeed_Normal.png:Icon_MultiplayerCampaign_AgingSpeed_Normal#2" //GUID:eded35eda85e36149aed21bfc04119c6
+			}
+			hard
+			{
+				text name = "Hard"
+				text description = "Recommended for experienced grand-strategy players, ready for a challenge.{p}AI kingdoms will be slightly stronger and player kingdoms might have some domestic or foreign problems immediately after starting the campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_High.png:Icon_MultiplayerCampaign_AIDifficulty_High#2" //GUID:302202ff72a73ca40a78bb345b49e394
+			}
+			very_hard
+			{
+				text name = "Very hard"
+				text description = "Recommended for experienced players of the campaign, ready to face stronger and competitive enemies.{p}AI kingdoms will be significantly stronger and player kingdoms are likely to have domestic or foreign problems immediately after starting the campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_Impossible.png:Icon_MultiplayerCampaign_AIDifficulty_Impossible#2" //GUID:51293efe90e5cf6429471b7bbaa8cd0f
+			}
+		}
+	}
+
+	int start_period
+	{
+		bool show_in_rules = true
+		text name = "Starting period"
+		text description = "Starting period of the campaign, determining what kingdoms are on the map and some of their properties like royal families, religion and units"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Early.png:Icon_MultiplayerCampaign_StartPeriod_Early#2"
+		options
+		{
+			early
+			{
+				text name = "1110 AD"
+				text description = "Starting political landscape based around year 1110"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Early.png:Icon_MultiplayerCampaign_StartPeriod_Early#2" //GUID:f67ef47fedf4ade44aaec6d6b958e115
+			}
+			default mid
+			{
+				text name = "1224 AD"
+				text description = "Starting political landscape based around year 1224"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Mid.png:Icon_MultiplayerCampaign_StartPeriod_Mid#2" //GUID:91711d53fae59a546896f470c423a941
+			}
+			late
+			{
+				text name = "1360 AD"
+				text description = "Starting political landscape based around year 1360"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Late.png:Icon_MultiplayerCampaign_StartPeriod_Late#2" //GUID:0e30b53142427c1439644be4b5229aa2
+			}
+		}
+	}
+	
+	string map_size
+	{
+		bool show_in_rules = false
+		text name = "Map size"
+		text description = "Size of the map the campaign will be played on (not implemented)" //!!! not implemented
+		sprite icon
+		options
+		{
+			Europe
+			{
+				text name = "Small"
+				text description = "Play on small map (dev)"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Small.png:Icon_MultiplayerCampaign_KingdomSize_Small#2" //GUID:2293adeba14917b40af3883fe6195e60
+			}
+			default europe
+			{
+				text name = "Large"
+				text description = "Play on large map"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_MapSize_Large.png:Icon_MultiplayerCampaign_MapSize_Large#2" //GUID:a722db3dc27606146b384a2f2dc29c23
+			}
+			
+		}
+	}
+	
+	// TOOD: update code
+	string pick_kingdom
+	{
+		text name = "Pick Kingdom"
+		text description = "Pick either starting kingdom, province or have one of those randomly picked."
+		options
+		{
+			default kingdom
+			{
+				text name = "Kingdom"
+				text description = "Pick one of the kingdoms to play with"
+			}
+			province
+			{
+				text name = "Province"
+				text description = "Pick one of the provinces to play with"
+			}
+			random_kingdom
+			{
+				text name = "Random kingdom"
+				text description = "Start with a randomly selected kingdom"
+			}
+			random_province
+			{
+				text name = "Random province"
+				text description = "Start with a randomly selected province"
+			}
+		}
+		
+	}
+
+	// TOOD: update code
+	int kingdom_size
+	{
+		bool show_in_rules = true
+		text name = "Kingdom size"
+		text description = "Have your kingdom resized to a selected number of provinces on the start of the campaign"
+		options
+		{
+			default 0
+			{
+				text name = "Historical"
+				text description = "The player selected kingdom starts with its historical size."
+			}
+			1
+			{
+				text name = "1 province"
+				text description = "Decrease kingdom size to 1 province."
+			}
+			2
+			{
+				text name = "2 provinces"
+				text description = "Increase or decrease kingdom size to 2 provinces."
+			}
+			3
+			{
+				text name = "3 provinces"
+				text description = "Increase or decrease kingdom size to 3 provinces."
+			}
+			4
+			{
+				text name = "4 provinces"
+				text description = "Increase or decrease kingdom size to 4 provinces."
+			}
+			5
+			{
+				text name = "5 provinces"
+				text description = "Increase or decrease kingdom size to 5 provinces."
+			}
+			
+		}
+		
+	}
+
+	string religious_standing
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		text name = "Religious standing"
+		text description = "Upon starting the campaign, maintain or take away the caliphate and autocephaly status of player's kingdom. Acquiring such status later on is always possible."
+		options
+		{
+			historical
+			{
+				text name = "Historical"
+				text description = "Player's kingdom keeps the initial autocephaly or caliphate status, if it has such."
+			}
+			default challenging 
+			{
+				text name = "Challenging"
+				text description = "Player's kingdom loses its initial caliphate or autocephaly status."
+			}
+		}
+	}
+	
+	string starting_king_class
+	{
+		bool set_in_thq = true
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		text name = "Starting Kings' class"
+		text description = "Choose the starting class of player's king and historically correct royal family or not."
+		options
+		{
+			default historical
+			{
+				text name = "Historical"
+				text description = "A random class is picked for player's king, among those defined as historically correct. The royal family is also historically correct as much as possible."
+			}
+			random
+			{
+				text name = "Random"
+				text description = "A random class is picked for the player's king, as well as queen, but no princes and princesses."
+			}
+			marshal
+			{
+				text name = "Marshal"
+				text description = "The player's king is a marshal, married and has no children."
+			}
+			merchant
+			{
+				text name = "Merchant"
+				text description = "The player's king is a merchant, married and has no children."
+			}
+			diplomat
+			{
+				text name = "Diplomat"
+				text description = "The player's king is a diplomat, married and has no children."
+			}
+			cleric
+			{
+				text name = "Cleric"
+				text description = "The player's king is a cleric, married and has no children."
+			}
+			spy
+			{
+				text name = "Spy"
+				text description = "The player's king is a spy, married and has no children."
+			}
+		}
+	}
+
+	int starting_gold_multiplier
+	{
+		bool show_in_rules = true
+		text name = "Starting gold"
+		text description = "Set how much gold your kingdom starts with in its treasury"
+		options
+		{
+			default 1
+			{
+				text name = "Normal"
+				text description = "Start with a regularly sized treasury"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_Normal.png:Icon_MultiplayerCampaign_StartingGold_Normal#2" //GUID:3e9101c71184792438f48ca679c03b5f
+			}
+			2
+			{
+				text name = "High"
+				text description = "Start with a fairly sizable treasury"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_High.png:Icon_MultiplayerCampaign_StartingGold_High#2" //GUID:68d47b079bf65b5489f4cb4fb5e73d33
+			}
+			4
+			{
+				text name = "Very High"
+				text description = "Start with a treasury overfilled with gold"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_VeryHigh.png:Icon_MultiplayerCampaign_StartingGold_VeryHigh#2" //GUID:7a3249d3ef7cbd04898a9b39ca0aff7b
+			}
+		}
+	}
+	
+	string aging_speed
+	{
+		bool show_in_rules = true
+		text name = "Kings aging"
+		text description = "Set how quickly the characters will age"
+		sprite icon
+		options
+		{
+			slow
+			{
+				text name = "Slow"
+				text description = "Characters age slowly"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AgingSpeed_Slow.png:Icon_MultiplayerCampaign_AgingSpeed_Slow#2" //GUID:4c111722f0409c54cb298099e68fe36a
+			}
+			default normal
+			{
+				text name = "Normal"
+				text description = "Characters age at normal rates"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AgingSpeed_Normal.png:Icon_MultiplayerCampaign_AgingSpeed_Normal#2" //GUID:eded35eda85e36149aed21bfc04119c6
+			}
+			fast
+			{
+				text name = "Fast"
+				text description = "Characters age quickly"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AgingSpeed_Fast.png:Icon_MultiplayerCampaign_AgingSpeed_Fast#2" //GUID:0eeb363eb14891d4698ca053325a5b59
+			}
+		}
+	}
+	
+	// hidden and off by default
+	int knight_aging
+	{
+		bool show_in_rules = true
+		text name = "Knight aging"
+		text description = "Knights, that are not part of the royal family, age as well"
+		sprite icon
+		options
+		{
+			default 0
+			{
+				text name = "Off"
+				text description = "Only Royal Family members age"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Aging_Off.png:Icon_MultiplayerCampaign_Aging_Off#2" //GUID:a531645490daeb543bdfe0e895353496
+			}
+			1
+			{
+				text name = "On"
+				text description = "All knights and Royal Family members age"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Aging_On.png:Icon_MultiplayerCampaign_Aging_On#2" //GUID:6e219ce661750c046b51de44ddce224b
+			}
+		}
+	}
+	
+	// hidden
+	// or hdie pick
+	string royal_family
+	{
+		bool show_in_rules = false
+		text name = "Royal family"
+		text description = "Select royal family starting options"
+		sprite icon
+		options
+		{
+			default historical
+			{
+				text name = "Historical"
+				text description = "Start with a royal family based on your kingdom’s historical records"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_RoyalFamily_Historical.png:Icon_MultiplayerCampaign_RoyalFamily_Historical#2" //GUID:6f62bbc911e5e664a8fbe20a4200878a
+			}
+			random
+			{
+				text name = "Random"
+				text description = "Start with a random young king with no queen and children."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_RoyalFamily_Random.png:Icon_MultiplayerCampaign_RoyalFamily_Random#2" //GUID:7662f984d7cdc4948bb88fa045c8b4b2
+			}
+			pick
+			{
+				text name = "Pick"
+				text description = "Start with a young king with no queen and children and pick his class."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_RoyalFamily_Pick.png:Icon_MultiplayerCampaign_RoyalFamily_Pick#2" //GUID:eec94ec794726264eaf6fb482c23c564
+			}
+		}
+	}
+	
+	string espionage_role
+	{
+		bool show_in_rules = true
+		text name = "Espionage role"
+		text description = "Available spy actions against the player"
+		sprite icon
+		options
+		{
+			default full
+			{
+				text name = "Full"
+				text description = "All spy interactions are possible"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Espionage_Role_Full.png:Icon_MultiplayerCampaign_Espionage_Role_Full#2" //GUID:e491c72fc693d9b41a9699f2f15abc0d
+			}
+			limited
+			{
+				text name = "Limited"
+				text description = "Severe spy interactions cannot be performed against the player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Espionage_Role_Limited.png:Icon_MultiplayerCampaign_Espionage_Role_Limited#2" //GUID:268252280d913d44abfc746a5d669c1e
+			}
+			minimal
+			{
+				text name = "Very limited"
+				text description = "Only the least severe Spy actions can be performed against the player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Espionage_Role_Disabled.png:Icon_MultiplayerCampaign_Espionage_Role_Disabled#2" //GUID:18955a4e2f896574b990bbd53fbf01b8
+			}
+		}
+	}
+
+	// Speed and pause
+	float min_speed
+	{
+		bool show_in_rules = false
+		text name = "Minimum game speed"
+		options
+		{
+			default 0.1
+			{
+				text name = "0.1x"
+			}
+		}
+	}
+	
+	float max_speed
+	{
+		bool show_in_rules = false
+		text name = "Maximum game speed"
+		options
+		{
+			default 100.0
+			{
+				text name = "100x"
+			}
+		}
+	}
+
+}

@@ -1,0 +1,1523 @@
+﻿def CampaignVars
+{
+	
+	////////////////////// major victories /////////////////////////////
+	string goal_prestige_victory
+	{
+		text name = "Emperor of the World"
+		text description = "Claim the 'Emperor of the World' title by becoming a great power and gaining the favor of the rest of the world."
+		sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_Emperor.psd:Element_Objective_Emperor#2" //GUID:b28f2f870f1234b4db11d22388c920a4
+		scoring
+		{
+			fame : ObjectiveScoreTypes.fame
+		}
+	}
+	
+	string goal_kingdom_advantages
+	{
+		text name = "Kingdom Advantages"
+		text description = "Unlock each kingdom advantage by producing or importing all goods."
+		sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_Advantages.psd:Element_Objective_Advantages#2" //GUID:7d8ffa8d3b731ca4b875e3757250b2ba
+		scoring
+		{
+			unique_resources : ObjectiveScoreTypes.unique_resources
+		}
+	}
+	
+	////////////////////// minor victories /////////////////////////////
+	string main_goal
+	{
+		bool changeable_after_start = false
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = true
+		bool set_in_thq = true
+		text name = "Main Goal"
+		text description = "Select the main goal of the campaign - whoever achieves the main goal first, wins."
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GrandCampaign.png:Icon_MultiplayerCampaign_GrandCampaign#2"
+		on_change_reset
+		{
+			team_size
+			gold_goal
+			realms_goal
+			goods_goal
+			target_kingdom_size
+		}
+		options
+		{
+			default None
+			{
+				text name = "None"
+				text secondary_name = "Grand Campaign"
+				text victory_condition = "Only grand campaign victory conditions apply"
+				text description = "No minor victory condition applies. Players may win by following the regular grand campaign rules."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_GrandCampaign.psd:Element_Objective_GrandCampaign#2" //GUID:e63b8aa606c190442aafd165bbd17457
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_GrandCampaign.psd:Element_GameMode_GrandCampaign#2" //GUID:aff01d201a1157443a67ecdf3fa8c3aa
+				scoring
+				{
+					fame : ObjectiveScoreTypes.fame
+				}
+				
+			}
+			HaveXGold
+			{
+				text name = "Greedy Kings"
+				text victory_condition = "{b}Victory condition:{/b} Have [{clr:red}{gold_goal}{/clr}|target] gold in your treasury"
+				text description = "Become the wealthiest ruler by collecting [{b}{gold_goal} gold{/b}|the selected amount of gold] in your kingdom's treasury. Gold and land donations between players are disabled."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_GreedyKings.psd:Element_Objective_GreedyKings#2" //GUID:cfdb237c6181d3549bd0c1e5d7a923f1
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_GreedyKings.psd:Element_GameMode_GreedyKings#2" //GUID:8ab04905beec88d43a04e3f571df61c2
+				scoring
+				{
+					gold : ObjectiveScoreTypes.gold
+				}
+			}
+			HaveXRealms
+			{
+				text name = "Peasants Rush"
+				text victory_condition = "{b}Victory condition:{/b} Expand and control {clr:red}{realms_goal}{/clr} provinces"
+				text description = "A brutal conflict of territorial control. The first team or player to expand their territories to [{b}{realms_goal} provinces{/b}|the selected number of provinces] and establish control over them wins. Land donations and vassal relations between players are disabled."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_PeasantRush.psd:Element_Objective_PeasantRush#2" //GUID:fa5266ccd240e384daa9ff165436a1fc
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_PeasantRush.psd:Element_GameMode_PeasantRush#2" //GUID:3a06f7395103e7c4abe48618585fc39a
+				scoring
+				{
+					realms : ObjectiveScoreTypes.realms
+				}
+			}
+			FirstBlood
+			{
+				text name = "First Blood"
+				text victory_condition = "{b}Victory condition:{/b} Defeat an enemy player"
+				text description = "Dominate the opposing forces by conquering all provinces of a kingdom, controlled by another player. Land donations to the targeted kingdom are disabled."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_FirstBlood.psd:Element_Objective_FirstBlood#2" //GUID:6cef105d1d3fc5540bba1e4e6646245c
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_FirstBlood.psd:Element_GameMode_FirstBlood#2" //GUID:926cf2ea4bfdb464cb05cf6d6d8eb4e8
+				scoring
+				{
+					army_strength : ObjectiveScoreTypes.army_strength
+				}
+			}
+			WarForGoods
+			{
+				text name = "War for Goods"
+				text victory_condition = "{b}Victory condition:{/b} Own {clr:red}{goods_goal}{/clr} goods"
+				text description = "Develop a commercial foothold over the world by producing [{b}{goods_goal} goods{/b}|the selected number of goods]. Land donations between players are disabled."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_WarForGoods.psd:Element_Objective_WarForGoods#2" //GUID:3d16cd5c936518a4c89f772e146c1c7f
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_WarForGoods.psd:Element_GameMode_WarForGoods#2" //GUID:c5bdd8176204c3442b92c7f8eb4aa50f
+				scoring
+				{
+					unique_resources : ObjectiveScoreTypes.unique_resources
+				}
+			}
+			DestroyKingdom
+			{
+				text name = "Destroy Kingdom"
+				text victory_condition = "{b}Victory condition:{/b} Defeat a kingdom"
+				text description = "An unforgiving race where the winner is whoever conquers the last province of [{b}{rules.destroy_goal}{/b}|a randomly chosen AI kingdom]. Land donations to the target kingdom are disabled."
+				sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_DestroyKingdom.psd:Element_Objective_DestroyKingdom#2" //GUID:2f82cbf841699044f9755fbf7a3b7cb9
+				sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_DestroyKingdom.psd:Element_GameMode_DestroyKingdom#2" //GUID:f99a41bde5989da4288326021fea3c39
+				scoring
+				{
+					army_strength : ObjectiveScoreTypes.army_strength
+				}
+			}
+			// ScoreRace
+			// {
+			// 	text name = "Score Race"
+			// 	text victory_condition = "{b}Victory condition:{/b} Reach the highest values of a selected score"
+			// 	text description = "When the time runs out, the player or team with the highest score of the selected type wins the campaign."
+			// 	sprite icon = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_Objective_DestroyKingdom.psd:Element_Objective_DestroyKingdom#2" //GUID:2f82cbf841699044f9755fbf7a3b7cb9
+			// 	sprite icon_wide = "Assets/UI/Elements/Multiplayer/InGameObjectives/Element_GameMode_DestroyKingdom.psd:Element_GameMode_DestroyKingdom#2" //GUID:f99a41bde5989da4288326021fea3c39
+			// }
+		}
+	}
+	
+	////////////////////// sub rules /////////////////////////////
+	int gold_goal
+	{
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Gold Amount"
+		text description = "Amount of gold required to win the campaign"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GoodsGoal.png:Icon_MultiplayerCampaign_GoodsGoal#2"
+		condition = (main_goal = "HaveXGold")
+		bool sub_rule = true
+		switch_value = "team_size"
+		
+		case 1 //free for all
+		{
+			options
+			{
+				15000
+				{
+					text name = "15,000 {gold_icon}"
+					text description = "Gold amount, required for victory"
+				}
+				default 35000
+				{
+					text name = "35,000 {gold_icon}"
+					text description = "Gold amount, required for victory"
+				}
+				50000
+				{
+					text name = "50,000 {gold_icon}"
+					text description = "Gold amount, required for victory"
+				}
+				75000
+				{
+					text name = "75,000 {gold_icon}"
+					text description = "Gold amount, required for victory"
+				}
+				100000
+				{
+					text name = "100,000 {gold_icon}"
+					text description = "Gold amount, required for victory"
+				}
+			}
+		}
+		case 2 // Two teams (was 2v2)
+		{
+			options
+			{
+				30000
+				{
+					text name = "30,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				default 70000
+				{
+					text name = "70,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				100000
+				{
+					text name = "100,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				200000
+				{
+					text name = "200,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				300000
+				{
+					text name = "300,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+			}
+		}
+		// obsolete
+		// case 3 // 3v3
+		// {
+		// 	options
+		// 	{
+		// 		60000
+		// 		{
+		// 			text name = "60,000 {gold_icon}"
+		// 			text description = "Combined gold amount of a team, required for victory"
+		// 		}
+		// 		default 100000
+		// 		{
+		// 			text name = "100,000 {gold_icon}"
+		// 			text description = "Combined gold amount of a team, required for victory"
+		// 		}
+		// 		150000
+		// 		{
+		// 			text name = "150,000 {gold_icon}"
+		// 			text description = "Combined gold amount of a team, required for victory"
+		// 		}
+		// 		200000
+		// 		{
+		// 			text name = "200,000 {gold_icon}"
+		// 			text description = "Combined gold amount of a team, required for victory"
+		// 		}
+		// 		300000
+		// 		{
+		// 			text name = "300,000 {gold_icon}"
+		// 			text description = "Combined gold amount of a team, required for victory"
+		// 		}
+		// 	}
+		// }
+		case 3 //Three teams (was 2v2v2)
+		{
+			options
+			{
+				30000
+				{
+					text name = "30,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				default 70000
+				{
+					text name = "70,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				100000
+				{
+					text name = "100,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				150000
+				{
+					text name = "150,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+				200000
+				{
+					text name = "200,000 {gold_icon}"
+					text description = "Combined gold amount of a team, required for victory"
+				}
+			}
+		}
+		case 5 //coop game //4 intentionally skipped
+		{
+			options
+			{
+				30000
+				{
+					text name = "30,000 {gold_icon}"
+					text description = "Combined gold amount of all players, required for victory"
+				}
+				default 75000
+				{
+					text name = "75,000 {gold_icon}"
+					text description = "Combined gold amount of all players, required for victory"
+				}
+				150000
+				{
+					text name = "150,000 {gold_icon}"
+					text description = "Combined gold amount of all players, required for victory"
+				}
+				300000
+				{
+					text name = "300,000 {gold_icon}"
+					text description = "Combined gold amount of all players, required for victory"
+				}
+				500000
+				{
+					text name = "500,000 {gold_icon}"
+					text description = "Combined gold amount of all players, required for victory"
+				}
+			}
+		}
+	}
+	
+	int realms_goal
+	{
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Provinces"
+		text description = "Expand your territories and reach the set province goal"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_HaveXRealms.png:Icon_MultiplayerCampaign_HaveXRealms#2"
+		condition = (main_goal = "HaveXRealms")
+		bool sub_rule = true
+		switch_value = "team_size"
+		on_change_reset
+		{
+			pick_kingdom
+			pick_realm
+		}
+		case 1 //free for all
+		{
+			options
+			{
+				5
+				{
+					text name = "5 provinces"
+					text description = "Number of provinces required for victory"
+					sprite icon
+				}
+				default 10
+				{
+					text name = "10 provinces"
+					text description = "Number of provinces required for victory"
+					sprite icon
+				}
+				15
+				{
+					text name = "15 provinces"
+					text description = "Number of provinces required for victory"
+					sprite icon
+				}
+				25
+				{
+					text name = "25 provinces"
+					text description = "Number of provinces required for victory"
+					sprite icon
+				}
+				40
+				{
+					text name = "40 provinces"
+					text description = "Number of provinces required for victory"
+					sprite icon
+				}
+			}
+		}
+		case 2 //Two teams (was 2v2)
+		{
+			options
+			{
+				10
+				{
+					text name = "10 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				default 20
+				{
+					text name = "20 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				40
+				{
+					text name = "40 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				75
+				{
+					text name = "75 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				120
+				{
+					text name = "120 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+			}
+		}
+		// obsolete
+		// case 3 //3v3
+		// {
+		// 	options
+		// 	{
+		// 		15
+		// 		{
+		// 			text name = "15 provinces"
+		// 			text description = "Combined number of provinces of a team, required for victory"
+		// 			sprite icon
+		// 		}
+		// 		default 30
+		// 		{
+		// 			text name = "30 provinces"
+		// 			text description = "Combined number of provinces of a team, required for victory"
+		// 			sprite icon
+		// 		}
+		// 		45
+		// 		{
+		// 			text name = "45 provinces"
+		// 			text description = "Combined number of provinces of a team, required for victory"
+		// 			sprite icon
+		// 		}
+		// 		75
+		// 		{
+		// 			text name = "75 provinces"
+		// 			text description = "Combined number of provinces of a team, required for victory"
+		// 			sprite icon
+		// 		}
+		// 		120
+		// 		{
+		// 			text name = "120 provinces"
+		// 			text description = "Combined number of provinces of a team, required for victory"
+		// 			sprite icon
+		// 		}
+		// 	}
+		// }
+		case 3 // Three teams  (was 2v2v2)
+		{
+			options
+			{
+				10
+				{
+					text name = "10 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				default 20
+				{
+					text name = "20 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				30
+				{
+					text name = "30 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				60
+				{
+					text name = "60 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+				100
+				{
+					text name = "100 provinces"
+					text description = "Combined number of provinces of a team, required for victory"
+					sprite icon
+				}
+			}
+		}
+		case 5 //coop game //4 intentionally skipped
+		{
+			options
+			{
+				10
+				{
+					text name = "10 provinces"
+					text description = "Combined number of provinces of all players, required for victory"
+					sprite icon
+				}
+				default 30
+				{
+					text name = "30 provinces"
+					text description = "Combined number of provinces of all players, required for victory"
+					sprite icon
+				}
+				50
+				{
+					text name = "50 provinces"
+					text description = "Combined number of provinces of all players, required for victory"
+					sprite icon
+				}
+				100
+				{
+					text name = "100 provinces"
+					text description = "Combined number of provinces of all players, required for victory"
+					sprite icon
+				}
+				200
+				{
+					text name = "200 provinces"
+					text description = "Combined number of provinces of all players, required for victory"
+					sprite icon
+				}
+			}
+		}
+	}
+	
+	int goods_goal
+	{
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Goods produced"
+		text description = "Unique goods produced by players"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GoodsGoal.png:Icon_MultiplayerCampaign_GoodsGoal#2"
+		condition = (main_goal = "WarForGoods")
+		bool sub_rule = true
+		options
+		{
+			10
+			{
+				text name = "10 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			default 20
+			{
+				text name = "20 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			30
+			{
+				text name = "30 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			50
+			{
+				text name = "50 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+			64
+			{
+				text name = "64 unique goods"
+				text description = "Number of unique goods produced, required for victory"
+				sprite icon
+			}
+		}
+	}
+	
+	int target_kingdom_size
+	{
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Enemy Size"
+		text description = "The relative size of the kingdom targeted for defeat"
+		sprite icon
+		condition = (main_goal = "DestroyKingdom")
+		bool sub_rule = true
+		options
+		{
+			1
+			{
+				text name = "Tiny"
+				text description = "The target kingdom will start with 1 or 2 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Small.png:Icon_MultiplayerCampaign_KingdomSize_Small#2"
+			}
+			2
+			{
+				text name = "Small"
+				text description = "The target kingdom will start with between 3 and 5 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Small.png:Icon_MultiplayerCampaign_KingdomSize_Small#2"
+			}
+			default 3
+			{
+				text name = "Medium"
+				text description = "The target kingdom will start with between 6 and 8 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Medium.png:Icon_MultiplayerCampaign_KingdomSize_Medium#2"
+			}
+			4
+			{
+				text name = "Large"
+				text description = "The target kingdom will start with between 9 and 12 provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Large.png:Icon_MultiplayerCampaign_KingdomSize_Large#2"
+			}
+			5
+			{
+				text name = "Empire"
+				text description = "The target kingdom will start with 13 or more provinces"
+				sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_KingdomSize_Empire.png:Icon_MultiplayerCampaign_KingdomSize_Empire#2"
+			}
+		}
+	}
+	// time_limit
+	// time_limit_minutes_hard
+	// time_limit_generations
+	// add Fame subre for (ScoreRace)
+	string time_limit
+	{
+		bool set_in_thq = true
+		bool show_in_rules = true
+		bool sub_rule = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Time limit"
+		text description = "The campaign will end after the selected time runs out or a number of kings of any player die"
+		options
+		{
+			default none
+			{
+				text name = "None"
+				text description = "No time limit"
+			}
+			60m
+			{
+				text name = "1 hour"
+				text description = "Campaign ends when the selected time passes"
+			}
+			120m
+			{
+				text name = "2 hours"
+				text description = "Campaign ends when the selected time passes"
+			}
+			180m
+			{
+				text name = "3 hours"
+				text description = "Campaign ends when the selected time passes"
+			}
+			300m
+			{
+				text name = "5 hours"
+				text description = "Campaign ends when the selected time passes"
+			}
+			420m
+			{
+				text name = "7 hours"
+				text description = "Campaign ends when the selected time passes"
+			}
+			3g
+			{
+				text name = "3 Generations"
+				text description = "End the campaign after the third death of a king of any player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TimeLimit_Generations_3.png:Icon_MultiplayerCampaign_TimeLimit_Generations_3#2"
+			}
+			4g
+			{
+				text name = "4 Generations"
+				text description = "End the campaign after the forth death of a king of any player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TimeLimit_Generations_4.png:Icon_MultiplayerCampaign_TimeLimit_Generations_4#2"
+			}
+			5g
+			{
+				text name = "5 Generations"
+				text description = "End the campaign after the fifth death of a king of any player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TimeLimit_Generations_5.png:Icon_MultiplayerCampaign_TimeLimit_Generations_5#2"
+			}
+			10g
+			{
+				text name = "10 Generations"
+				text description = "End the campaign after the tenth death of a king of any player"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TimeLimit_Generations_5.png:Icon_MultiplayerCampaign_TimeLimit_Generations_5#2"
+			}
+		}
+		
+	}
+	
+	////////////////////// rules /////////////////////////////
+	string ai_difficulty
+	{
+		bool show_in_rules = true
+		bool set_in_thq = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Difficulty"
+		text description = "Depending on this setting, some starting conditions or events can be changed/limited to ease the players, as well as the power of rebellions and AI kingdoms, their attitude towards players, and others."
+		sprite icon
+		options
+		{
+			easy
+			{
+				text name = "Easy"
+				text description = "Recommended for inexperienced or casual players.{p}Players will have less troubles in the beginning of the campaign and both AI and rebels will pose a smaller threat towards them."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_Easy.png:Icon_MultiplayerCampaign_AIDifficulty_Easy#2"
+			}
+			default normal
+			{
+				text name = "Normal"
+				text description = "Standard campaign difficulty.{p}Players will have moderate challenge with no rules to increase or decrease it."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AgingSpeed_Normal.png:Icon_MultiplayerCampaign_AgingSpeed_Normal#2"
+			}
+			hard
+			{
+				text name = "Hard"
+				text description = "Recommended for experienced grand-strategy players, ready for a challenge.{p}AI kingdoms will be slightly stronger and player kingdoms might have some domestic or foreign problems soon after starting the campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_High.png:Icon_MultiplayerCampaign_AIDifficulty_High#2"
+			}
+			very_hard
+			{
+				text name = "Very hard"
+				text description = "Recommended for experienced players of the campaign, ready to face stronger and competitive enemies.{p}AI kingdoms will be significantly stronger and player kingdoms might have full-scale domestic or foreign problems immediately after starting the campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_AIDifficulty_Impossible.png:Icon_MultiplayerCampaign_AIDifficulty_Impossible#2"
+			}
+		}
+	}
+
+	string map_size
+	{
+		bool show_in_rules = (in_editor)
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Map"
+		text description = "Choose the map the campaign will be played on"
+		sprite icon
+		options
+		{
+			test
+			{
+				text name = "Test"
+				text description = "Play on the test map"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_MapSize_Medium.png:Icon_MultiplayerCampaign_MapSize_Medium#2"
+			}
+			default europe
+			{
+				text name = "Europe"
+				text description = "Play on Europe"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_MapSize_Large.png:Icon_MultiplayerCampaign_MapSize_Large#2"
+			}
+		}
+	}
+
+	string start_period
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = true
+		bool set_in_thq = true
+		text name = "Starting period"
+		text description = "Starting period of the campaign, determining what kingdoms are on the map and some of their properties like royal families, religion and units"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Early.png:Icon_MultiplayerCampaign_StartPeriod_Early#2"
+		options
+		{
+			early
+			{
+				text name = "1110 AD"
+				text description = "Starting political landscape based around year 1110"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Early.png:Icon_MultiplayerCampaign_StartPeriod_Early#2"
+			}
+			default mid
+			{
+				text name = "1224 AD"
+				text description = "Starting political landscape based around year 1224"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Mid.png:Icon_MultiplayerCampaign_StartPeriod_Mid#2"
+			}
+			late
+			{
+				text name = "1360 AD"
+				text description = "Starting political landscape based around year 1360"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartPeriod_Late.png:Icon_MultiplayerCampaign_StartPeriod_Late#2"
+			}
+		}
+	}
+		
+	string pick_kingdom
+	{
+		bool set_in_thq = true
+		text name = "Kingdom pick"
+		text description = "Players can either pick from kingdoms, provinces, or one of those can be randomly picked for them"
+		options
+		{
+			default kingdom
+			{
+				text name = "Kingdom"
+				text description = "Players can pick a kingdom"
+			}
+			province
+			{
+				text name = "Province"
+				text description = "Players can pick a province"
+			}
+			random_kingdom
+			{
+				text name = "Random kingdom"
+				text description = "Players start with a randomly selected kingdom"
+			}
+			random_province
+			{
+				text name = "Random province"
+				text description = "Players start with a randomly selected province"
+			}
+		}
+		
+	}
+	
+	int kingdom_size
+	{
+		bool set_in_thq = true
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Kingdom size"
+		text description = "Players pick between kingdoms. Their territories will then be increased or decreased to a number of provinces"
+		options
+		{
+			0
+			{
+				text name = "Historical"
+				text description = "Player selected kingdoms start with their historical size."
+			}
+			1
+			{
+				text name = "1 province"
+				text description = "Decrease kingdom size to 1 province."
+			}
+			default 2
+			{
+				condition = (main_goal != "HaveXRealms" or realms_goal > 2)
+				text name = "2 provinces"
+				text description = "Increase or decrease kingdom size to 2 provinces."
+			}
+			3
+			{
+				condition = (main_goal != "HaveXRealms" or realms_goal > 3)
+				text name = "3 provinces"
+				text description = "Increase or decrease kingdom size to 3 provinces."
+			}
+			4
+			{
+				condition = (main_goal != "HaveXRealms" or realms_goal > 4)
+				text name = "4 provinces"
+				text description = "Increase or decrease kingdom size to 4 provinces."
+			}
+			5
+			{
+				condition = (main_goal != "HaveXRealms" or realms_goal > 5)
+				text name = "5 provinces"
+				text description = "Increase or decrease kingdom size to 5 provinces."
+			}
+			
+		}
+		
+	}
+
+	string religious_standing
+	{
+		bool set_in_thq = true
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Religious standing"
+		text description = "Upon starting the campaign, maintain or take away the caliphate and autocephaly status of kingdoms, picked by players. Acquiring such status later on is always possible."
+		options
+		{
+			historical
+			{
+				text name = "Historical"
+				text description = "Players' kingdoms keeps the initial autocephaly or caliphate status, if they have such."
+			}
+			default challenging 
+			{
+				text name = "Challenging"
+				text description = "Players' kingdoms lose their initial caliphate or autocephaly status."
+			}
+		}
+	}
+	
+	string starting_king_class
+	{
+		bool set_in_thq = true
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Starting Kings' class"
+		text description = "Choose the starting class of players' kings and whether they start with historically correct families."
+		options
+		{
+			historical
+			{
+				text name = "Historical"
+				text description = "A random class is picked for each players' king, among those defined as historically correct. Royal families are also historically correct as much as possible."
+			}
+			random
+			{
+				text name = "Random"
+				text description = "A random class is picked for each players' king. Each players' king is married and has no children."
+			}
+			default random_same
+			{
+				text name = "Random (same)"
+				text description = "One random class is picked for all players' king. Each players' king is married and has no children."
+			}
+			marshal
+			{
+				text name = "Marshal"
+				text description = "All players' kings are marshals, married and have no children."
+			}
+			merchant
+			{
+				text name = "Merchant"
+				text description = "All players' kings are merchants, married and have no children."
+			}
+			diplomat
+			{
+				text name = "Diplomat"
+				text description = "All players' kings are diplomats, married and have no children."
+			}
+			cleric
+			{
+				text name = "Cleric"
+				text description = "All players' kings are clerics, married and have no children."
+			}
+			spy
+			{
+				text name = "Spy"
+				text description = "All players' kings are spies, married and have no children."
+			}
+		}
+	}
+
+	int starting_gold
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Starting gold"
+		text description = "How much gold player kingdoms start with in their treasuries"
+		sprite icon
+		options
+		{
+			1000
+			{
+				text name = "Normal"
+				text description = "Start with 1000{gold_icon}"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_Normal.png:Icon_MultiplayerCampaign_StartingGold_Normal#2"
+			}
+			default 2000
+			{
+				text name = "High"
+				text description = "Start with 2000{gold_icon}"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_High.png:Icon_MultiplayerCampaign_StartingGold_High#2"
+			}
+			4000
+			{
+				text name = "Very High"
+				text description = "Start with 4000{gold_icon}"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_StartingGold_VeryHigh.png:Icon_MultiplayerCampaign_StartingGold_VeryHigh#2"
+			}
+			
+		}
+	}
+	
+	int team_size
+	{
+		bool set_in_thq = true
+		bool show_in_rules = false
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Teams"
+		text description = "Player teams count and sizes "
+		sprite icon
+		on_change_reset
+		{
+			gold_goal
+			realms_goal
+			goods_goal
+		}
+		options
+		{
+			default 1
+			{
+				text name = "Free For All"
+				text description = "Players compete and win on their own."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TeamSize_FreeForAll.png:Icon_MultiplayerCampaign_TeamSize_FreeForAll#2"
+			}
+			2
+			{
+				text name = "Two Teams"
+				text description = "Players are split into two teams. Victory conditions are adapted for a team campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TeamSize_TwoVsTwo.png:Icon_MultiplayerCampaign_TeamSize_TwoVsTwo#2"
+			}
+			3
+			{
+				text name = "Three teams"
+				text description = "Players are split into three teams. Victory conditions are adapted for a team campaign."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TeamSize_ThreeVsThree.png:Icon_MultiplayerCampaign_TeamSize_ThreeVsThree#2"
+			}
+			5
+			{
+				condition = (main_goal != "FirstBlood")
+				text name = "Co-op play"
+				text description = "All players are considered as a team and they must work together to achieve victory."
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_TeamSize_Co-op.png:Icon_MultiplayerCampaign_TeamSize_Co-op#2"
+			}
+		}
+	}
+	
+	// aging 
+	// Slow – Normal – Fast;
+	string aging_speed
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Kings aging"
+		text description = "How quickly the characters will age"
+		options
+		{
+			slow
+			{
+				text name = "Slow"
+				text description = "Characters age slowly"
+			}
+			default normal
+			{
+				text name = "Normal"
+				text description = "Characters age at normal rates"
+			}
+			fast
+			{
+				text name = "Fast"
+				text description = "Characters age quickly"
+			}
+		}
+	}
+	
+	int knight_aging
+	{
+		bool show_in_rules = true
+		text name = "Knight aging"
+		text description = "Knights, that are not part of the royal family, age as well"
+		sprite icon
+		options
+		{
+			default 0
+			{
+				text name = "Off"
+				text description = "Only Royal Family members age"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Aging_Off.png:Icon_MultiplayerCampaign_Aging_Off#2"
+			}
+			1
+			{
+				text name = "On"
+				text description = "All knights and Royal Family members age"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_Aging_On.png:Icon_MultiplayerCampaign_Aging_On#2"
+			}
+		}
+	}
+	
+	
+	// player wars
+	// change to playerwars_limit
+	string playerwars_limit_time
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Player wars"
+		text description = "Player wars can be forbidden, allowed, or allowed after some time or generations pass"
+		options
+		{
+			// comment
+			default always
+			{
+				text name = "Always"
+				text description = "No restrictions"
+			}
+			never
+			{
+				condition = (main_goal != "FirstBlood")
+				text name = "Never"
+				text description = "Forbid wars between players for the entirety of the campaign"
+			}
+			30m
+			{
+				text name = "30 minutes"
+				text description = "Forbid wars between players for the half an hour"
+			}
+			60m
+			{
+				text name = "1 hours"
+				text description = "Forbid wars between players for the first hour"
+			}
+			120m
+			{
+				text name = "2 hours"
+				text description = "Forbid wars between players for the first 2 hours"
+			}
+			1g
+			{
+				text name = "1 Generation"
+				text description = "Players can attack each other after the first death of a king of any player"
+			}
+			2g
+			{
+				text name = "2 Generations"
+				text description = "Players can attack each other after the second death of a king of any player"
+			}
+			3g
+			{
+				text name = "3 Generations"
+				text description = "Players can attack each other after the third death of a king of any player"
+			}
+		}
+	}
+	
+	// PVP epsionage
+	string espionage_role
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Espionage role"
+		text description = "Available spy actions against players"
+		options
+		{
+			default full
+			{
+				text name = "Full"
+				text description = "All spy interactions are possible"
+			}
+			limited
+			{
+				text name = "Limited"
+				text description = "Severe spy interactions cannot be performed against players"
+			}
+			minimal
+			{
+				text name = "Very limited"
+				text description = "Only the least severe Spy actions can be performed against players"
+			}
+			
+		}
+	}
+	
+	int playerwars_enable_loosing_players //TODO: reverse it to something like "forbid winning pl to declare war"
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Allow wars between losing players"
+		text description = "Players are not allowed to attack other players, weaker than themselves"
+		options
+		{
+			default 0
+			{
+				text name = "Off"
+				text description = "No restriction"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_PlayerWars_Enablde_LossingSide_Off.png:Icon_MultiplayerCampaign_PlayerWars_Enablde_LossingSide_Off#2"
+			}
+			1
+			{
+				text name = "On"
+				text description = "Only losing players may declare wars to other players"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_PlayerWars_Enablde_LossingSide_On.png:Icon_MultiplayerCampaign_PlayerWars_Enablde_LossingSide_On#2"
+			}
+		}
+	}
+	
+	int on_player_destroyed_pick_count
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Defeated Players"
+		text description = "How many times players may pick a new kingdom, if defeated"
+		sprite icon
+		options
+		{
+			0
+			{
+				text name = "Eliminated"
+				text description = "Once a player's kingdom is destroyed, they are eliminated"
+			}
+			1
+			{
+				text name = "1 repick"
+				text description = "Number of repick allowed when player's kingdom is destroyed"
+			}
+			default 2
+			{
+				text name = "2 repicks"
+				text description = "Number of repick allowed when player's kingdom is destroyed"
+			}
+			3
+			{
+				text name = "3 repicks"
+				text description = "Number of repick allowed when player's kingdom is destroyed"
+			}
+		}
+	}
+	
+	// Speed and pause
+	float min_speed
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = true
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Minimum game speed"
+		text description = "The slowest game speed allowed"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GameSpeed_Min.png:Icon_MultiplayerCampaign_GameSpeed_Min#2"
+		options
+		{
+			0.5
+			{
+				text name = "0.5x"
+				text description = "Game speed can be reduced to this value"
+			}
+			default 1.0
+			{
+				text name = "1x"
+				text description = "Game speed can be reduced to this value"
+			}
+		}
+	}
+	
+	float max_speed
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = true
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Maximum game speed"
+		text description = "The fastest game speed allowed"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_GameSpeed_Max.png:Icon_MultiplayerCampaign_GameSpeed_Max#2"
+		options
+		{
+			1.0
+			{
+				text name = "1x"
+				text description = "Game speed can be increased up to this value"
+			}
+			2.0
+			{
+				text name = "2x"
+				text description = "Game speed can be increased up to this value"
+			}
+			default 4.0
+			{
+				text name = "4x"
+				text description = "Game speed can be increased up to this value"
+			}
+			6.0
+			{
+				text name = "6x"
+				text description = "Game speed can be increased up to this value"
+			}
+			8.0
+			{
+				text name = "8x"
+				text description = "Game speed can be increased up to this value"
+			}
+			10.0
+			{
+				text name = "10x"
+				text description = "Game speed can be increased up to this value"
+			}
+		}
+	}
+	
+	int pause_refresh
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = true
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Pause cooldown"
+		text description = "Minimum time allowed between player's pauses, based on their previous pause duration"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_Pause_Refresh.png:Icon_MultiplayerCampaign_Pause_Refresh#2"
+		options
+		{
+			default 0
+			{
+				text name = "None"
+				text description = "No restriction"
+			}
+			1
+			{
+				text name = "Short"
+				text description = "Adds a cooldown equal to the duration of the last pause"
+			}
+			2
+			{
+				text name = "Medium"
+				text description = "Adds a cooldown twice as long as the last pause"
+			}
+			4
+			{
+				text name = "Long"
+				text description = "Adds a cooldown four times higher than the last pause"
+			}
+			
+		}
+	}
+	
+	string unpause_cooldown
+	{
+		bool show_in_rules = true
+		bool changeable_after_start = true
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = false
+		text name = "Unpause lock"
+		text description = "Time after which players may unpause the game, if another player has paused"
+		sprite icon = "Assets/UI/Elements/MultiplayerCampaings/RuleIcons/Icon_MultiplayerCampaign_Pause_Cooldown.png:Icon_MultiplayerCampaign_Pause_Cooldown#2"
+		options
+		{
+			default 0
+			{
+				text name = "Unrestricted"
+				text description = "All players can unpause at any moment"
+			}
+			30
+			{
+				text name = "Short"
+				text description = "Any player may unpause after a short period"
+			}
+			60
+			{
+				text name = "Medium"
+				text description = "Any player may unpause a medium period"
+			}
+			180
+			{
+				text name = "Long"
+				text description = "Any player may unpause after a long period"
+			}
+		}
+	}
+
+	string early_end_resolve
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Early End Resolution"
+		text description = "What happens when the campaign time limit has expired"
+		options
+		{
+			default none
+			{
+				text name = "Draw"
+				text description = "There is no winner"
+			}
+		}
+	}
+	
+	// not implemented
+	int ai_style
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = false
+		bool changeable_after_copy = false
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "AI playstyle"
+		text description = "Preferred AI playstyle when controlling kingdoms of disconnected players"
+		sprite icon
+		options
+		{
+			default 0
+			{
+				text name = "Neutral"
+				text description = "While players are offline, their AI replacement will play as usual"
+			}
+			1
+			{
+				text name = "Defensive"
+				text description = "While players are offline, their AI replacement will play defensively"
+			}
+		}
+	}
+	
+	
+	// not implemented
+	int offline_defense_buff
+	{
+		bool show_in_rules = false
+		bool changeable_after_start = true
+		bool changeable_after_copy = true
+		bool copy_when_reverting_victory_condition_from_save = true
+		text name = "Boost defenses"
+		text description = "Defensive boost of disconnected players"
+		sprite icon
+		options
+		{
+			default 0
+			{
+				text name = "Off"
+				text description = "Offline players gain no bonuses"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_OfflineDefenseBuff_Off.png:Icon_MultiplayerCampaign_OfflineDefenseBuff_Off#2"
+			}
+			1
+			{
+				text name = "On"
+				text description = "Boost the defenses of offline players"
+				sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_OfflineDefenseBuff_On.png:Icon_MultiplayerCampaign_OfflineDefenseBuff_On#2"
+			}
+		}
+	}
+	
+	// it is now a per-player setting
+	// int sync_start
+	// {
+	// 	bool show_in_rules = false
+	// 	bool changeable_after_start = true
+	// 	text name = "Synced start"
+	// 	text description = "Campaign starting requires all players to be online"
+	// 	sprite icon
+	// 	options
+	// 	{
+	// 		default 0
+	// 		{
+	// 			text name = "Off"
+	// 			text description = "The campaign can be started while players are offline"
+	// 			sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_SyncedStart_Off.png:Icon_MultiplayerCampaign_SyncedStart_Off#2"
+	// 		}
+	// 		1
+	// 		{
+	// 			text name = "On"
+	// 			text description = "All players must be online for the campaign to be started"
+	// 			sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_SyncedStart_On.png:Icon_MultiplayerCampaign_SyncedStart_On#2"
+	// 		}
+	// 	}
+	// }
+	
+	
+	// obsolete 
+	// string casus_belli_role
+	// {
+	// 	bool show_in_rules = false
+	// 	bool changeable_after_start = true
+	// 	text name = "Casus Belli role"
+	// 	text description = "The importance of Casus Belli for declaring war"
+	// 	sprite icon
+	// 	options
+	// 	{
+	// 		default symbolic
+	// 		{
+	// 			text name = "Symbolic"
+	// 			text description = "Declaring war without Casus Belli has small repercussions"
+	// 			sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_CasusBelli_Role_Symbolic.png:Icon_MultiplayerCampaign_CasusBelli_Role_Symbolic#2"
+	// 		}
+	// 		severe
+	// 		{
+	// 			text name = "Severe"
+	// 			text description = "Declaring war without Casus Belli has heavy repercussions"
+	// 			sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_CasusBelli_Role_Severe.png:Icon_MultiplayerCampaign_CasusBelli_Role_Severe#2"
+	// 		}
+	// 		obligatory
+	// 		{
+	// 			text name = "Obligatory"
+	// 			text description = "Declaring war without Casus Belli is impossible"
+	// 			sprite icon = "Assets/UI/Elements/Multiplayer/Campaings/RuleIcons/Icon_MultiplayerCampaign_CasusBelli_Role_Obligatory.png:Icon_MultiplayerCampaign_CasusBelli_Role_Obligatory#2"
+	// 		}
+	// 	}
+	// }
+	
+	
+	
+	////////////////////// misc /////////////////////////////
+	string name
+	{
+		bool set_in_thq = true
+		text name = "Campaign name"
+	}
+	
+	string host_message
+	{
+		bool set_in_thq = true
+		text host_message = ""
+	}
+
+	int countdown_time = 10
+	{
+		bool show_in_rules = false
+		bool set_in_thq = false
+	}
+	
+}
+
+def ObjectiveScoreTypes
+{
+	fame
+	{
+		float score_weight = 1
+		text name = "Fame"
+		text description = "Scoring is based on kingdom's fame, which is accumulated by buildings, skills, produced goods, vassals and other factors."
+	}
+	gold
+	{
+		float score_weight = 1
+		text name = "Gold"
+		text description = "Scoring is based on the gold, which is currently possessed in kingdom's treasury."
+	}
+	realms
+	{
+		float score_weight = 1
+		text name = "Provinces"
+		text description = "Scoring is based on the number of provinces under kingdom's control. Lands occupied by rebels are not counted."
+	}
+	army_strength
+	{
+		float score_weight = 1
+		text name = "Army strength"
+		text description = "Scoring is based on the overall manpower and strength of kingdom's troops. Troops in garrisons contribute less than those in armies."
+	}
+	unique_resources
+	{
+		float score_weight = 1
+		text name = "Goods"
+		text description = "Scoring is based on the number of unique goods produced or imported by a kingdom or a team."
+	}
+}
